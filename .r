@@ -7,6 +7,8 @@ t_start <- Sys.time()
 
 # --- config ---------------------------------------------------------------
 # zip_path     <- "Data_IUCNGeorginaGidgee.zip"   # bundled in this repo
+# https://drive.google.com/file/d/1CnpAGCjvHVkS2BfOmVDVbjSQ8JvoS-_9/view?usp=sharing
+#1CnpAGCjvHVkS2BfOmVDVbjSQ8JvoS-_9
 data_dir     <- "data/IUCNGeorginaGidgee"        # local extraction cache (gitignored)
 output_dir   <- "output/01_current_maxent"
 species_name <- "Acacia georginae"
