@@ -1,0 +1,6 @@
+data/
+output/
+.ipynb_checkpoints/
+.Rhistory
+.RData
+.DS_Store
