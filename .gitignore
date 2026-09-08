@@ -1,6 +1,8 @@
-data/
 output/
 .ipynb_checkpoints/
 .Rhistory
 .RData
 .DS_Store
+.Data_IUCNGeorginaGidgee.zip*.zip
+Data_IUCNGeorginaGidgee.zip
+teams
