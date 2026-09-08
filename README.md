@@ -1,3 +1,4 @@
+Workflow Steps:
 
 Species: 
 1. Georgina gidgee (Acacia georginae F.M.Bailey) occurrences from GBIF on 13-Aug-2026-02:38:46.080849
@@ -25,3 +26,7 @@ Future raster Stack:
 CMIP3/SRES: A1B/CSIRO_mk3.6/2.5_arcmin/{2030,2050,2070}
 CMIP5/AR5: AR5/CSIRO_mk3.6/2.5_arcmin/{RCP26,RCP45,RCP60,RCP85}/{2030,2050,2070,2080}
 
+Re-reunning this workflow
+- clone the repository
+- unzip the data folder(path should match otherwise if facing error check paths)
+- Run Component 1 SDM
