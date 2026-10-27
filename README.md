@@ -42,4 +42,35 @@ Re-reunning this workflow
 
 ## Fair Check
 <!-- FAIR:START -->
+## FAIR assessment
+
+[![FAIR checklist badge](https://fairsoftwarechecklist.net/badge.svg)](https://fairsoftwarechecklist.net/v0.2?f=01&a=00110&i=30001&r=022) ![EIW FAIR score](https://img.shields.io/badge/EIW%20FAIR-11%2F33-orange)
+
+**11 / 33 points · 5 / 15 questions at EIW target** · not yet at EIW minimum
+
+| Principle | Score | EIW target |
+|---|---|---|
+| Findable | 1 / 4 (25%) | 4 / 4 |
+| Accessible | 2 / 10 (20%) | 10 / 10 |
+| Interoperable | 4 / 12 (33%) | 12 / 12 |
+| Reusable | 4 / 7 (57%) | 6 / 7 |
+
+<details><summary>Gaps to close (10)</summary>
+
+- **f:q0 Indexed by search engines** (0 / 3): Not public and no machine-readable metadata
+- **a:q0 Identifier gives a copy** (0 / 3): Repo is private: others cannot download it
+- **a:q1 Persistent identifier (DOI)** (0 / 2): No DOI: a GitHub URL can move or vanish
+- **a:q4 Identifier in metadata** (0 / 3): No workflow name or ID in metadata (no CITATION.cff)
+- **i:q1 Versioning scheme** (0 / 2): No git tags or version numbers
+- **i:q2 Dependencies specified** (0 / 3): No dependency file (renv.lock / requirements.txt)
+- **i:q3 Links to related software** (0 / 2): No links to related software (CITATION.cff references)
+- **i:q4 Links to related data** (1 / 2): No data references in CITATION.cff (add input DOIs)
+- **r:q0 Executable** (0 / 1): Missing: pinned dependencies, input data
+- **r:q2 Licence** (2 / 3): No SPDX licence id in CITATION.cff / codemeta
+
+</details>
+
+![FAIR scores per question](fair/fair-scores.png)
+
+<sub>Updated 2026-10-27 from commit `07b6072` by `.fair/fair_check.R`. Edit `.fair/fair-checklist.yml`, not this block.</sub>
 <!-- FAIR:END -->
