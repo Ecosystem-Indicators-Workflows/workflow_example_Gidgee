@@ -9,7 +9,6 @@ format:
     toc: true
     code-fold: true      # code hidden behind "Show code", outputs visible
     code-tools: true
-    embed-resources: true  # single self-contained file for GitHub Pages
 editor: visual
 ---
 
@@ -17,32 +16,32 @@ editor: visual
 
 This notebook reproduces the IUCN Red List of Ecosystems assessment of Georgina gidgee woodlands (Wardle et al. 2015) as an open, re-runnable R workflow. It is rebuilt from TERN CoESRA Case Study 2 as part of the Ecosystem Indicator Workflows (EIW) project.
 
-- **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia.
+- **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia. IUCN Global Ecosystem Typology functional group: **TODO: confirm GET code**.
 - **Questions:** Is the ecosystem threatened under the IUCN Red List of Ecosystems criteria A–E, and how might the area of suitable climate change under future scenarios?
 - **Method:**
-  1. Download and validate the occurrence records.
-  2. Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B.
-  3. Fit a MaxEnt species distribution model to baseline climate (c. 2000), soil type and IBRA bioregion.
-  4. Project the model to 19 future climate scenarios from CSIRO Mk3.6: SRES A1B for 2030, 2050 and 2070, and RCP 2.6, 4.5, 6.0 and 8.5 for 2030, 2050, 2070 and 2080.
-  5. Combine the results with the documented evidence from the 2015 assessment and assign IUCN categories.
-  6. Compare the result with the published assessment.
+  1.  Download and validate the occurrence records.
+  2.  Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B.
+  3.  Fit a MaxEnt species distribution model to baseline climate (c. 2000), soil type and IBRA bioregion.
+  4.  Project the model to 19 future climate scenarios from CSIRO Mk3.6: SRES A1B for 2030, 2050 and 2070, and RCP 2.6, 4.5, 6.0 and 8.5 for 2030, 2050, 2070 and 2080.
+  5.  Combine the results with the documented evidence from the 2015 assessment and assign IUCN categories.
+  6.  Compare the result with the published assessment.
 - **Outputs:** maps, rasters, model files and tables in `results/`; data inventory, parameters, session information and workflow notes in `provenance/`.
-- **Requirements:** R with Java (MaxEnt runs through `rJava`), about 8 GB of memory for Java, about 3 GB of free disk space for the downloaded data, and internet access for Step 1. Run time and peak memory are recorded in `provenance/`.
+- **Requirements:** R with Java (MaxEnt runs through `rJava`), about 8 GB of memory for Java, about 3 GB of free disk space for the downloaded data, and internet access for Step 1. Run time and peak memory are recorded in `provenance/`. **TODO: add tested R version and typical run time.**
 
 To run the workflow, open this file in RStudio and render it, or run `quarto render Gidgee_workflow_2026.qmd` from the repository root. Step 0 installs any missing R packages into your R library.
 
-## Data sources
+## Data sources {#data-sources}
 
 All inputs are downloaded in Step 1 from two public archives supplied with TERN CoESRA Case Study 2.
 
-| Data | Source | Used for |
-|------|--------|----------|
-| *Acacia georginae* occurrence records (272 records before cleaning) | Case-study archive | Criterion B; model presences |
-| Baseline climate: 19 bioclimatic variables, c. 2000, 0.05° (3 arcmin) | Case-study archive | Model predictors |
-| Future climate: CSIRO Mk3.6, SRES A1B and RCP 2.6–8.5 | Case-study archive | Model projections |
-| Soil type grid | Case-study archive | Categorical predictor |
-| IBRA bioregion grid (Interim Biogeographic Regionalisation for Australia, version 7) | Case-study archive | Categorical predictor |
-| Original Kepler / BCCVL workflow files | Case-study archive | Assessor notes for Criteria A, D and E |
+| Data | Source | Used for | Licence and attribution |
+|--------------|--------------|--------------|-------------------------------|
+| *Acacia georginae* occurrence records (272 records before cleaning) | **TODO:** GBIF download DOI and/or Atlas of Living Australia query, with access date | Criterion B; model presences | **TODO:** GBIF and ALA records carry CC0, CC BY 4.0 or CC BY-NC 4.0 per record; cite the download DOI |
+| Baseline climate: 19 bioclimatic variables, c. 2000, 0.05° (3 arcmin) | **TODO:** original climate dataset | Model predictors | **TODO** |
+| Future climate: CSIRO Mk3.6, SRES A1B and RCP 2.6–8.5 | **TODO:** original climate dataset | Model projections | **TODO** |
+| Soil type grid | **TODO:** original dataset | Categorical predictor | **TODO** |
+| IBRA bioregion grid | Interim Biogeographic Regionalisation for Australia v7 (Department of the Environment 2012) | Categorical predictor | **TODO:** confirm licence (CC BY expected) |
+| Original Kepler / BCCVL workflow files | TERN CoESRA Case Study 2 | Assessor notes for Criteria A, D and E | **TODO** |
 
 The Google Drive links are not persistent identifiers. Before release, the input archives should be deposited with a DOI (for example in Zenodo) and Step 1 updated to download from there.
 
@@ -50,15 +49,15 @@ The Google Drive links are not persistent identifiers. Before release, the input
 
 **Study area.** The case study defines the study area as the union of 13 IBRA7 regions:
 
-| Code | IBRA7 region | Code | IBRA7 region |
-|------|--------------|------|--------------|
-| BRT | Burt Plain | MGD | Mitchell Grass Downs |
-| CHC | Channel Country | MII | Mount Isa Inlier |
-| DEU | Desert Uplands | MUL | Mulga Lands |
-| DMR | Davenport Murchison Ranges | SSD | Simpson Strzelecki Dunefields |
-| FIN | Finke | STP | Stony Plains |
-| GSD | Great Sandy Desert | TAN | Tanami |
-| MAC | MacDonnell Ranges | | |
+| Code | IBRA7 region               | Code | IBRA7 region                  |
+|------|----------------------------|------|-------------------------------|
+| BRT  | Burt Plain                 | MGD  | Mitchell Grass Downs          |
+| CHC  | Channel Country            | MII  | Mount Isa Inlier              |
+| DEU  | Desert Uplands             | MUL  | Mulga Lands                   |
+| DMR  | Davenport Murchison Ranges | SSD  | Simpson Strzelecki Dunefields |
+| FIN  | Finke                      | STP  | Stony Plains                  |
+| GSD  | Great Sandy Desert         | TAN  | Tanami                        |
+| MAC  | MacDonnell Ranges          |      |                               |
 
 This workflow does not crop to those regions. The supplied IBRA grid holds numeric codes without a legend, so regions cannot be selected by name. The model therefore uses the full extent of the supplied rasters, which is continental Australia (111.975–156.275° E, 44.525–9.975° S, 0.05° cells), and IBRA bioregion enters the model as a categorical predictor. The continental extent affects the background sample and the suitable-area totals. Cropping to the official study area needs the IBRA7 polygons with their region codes.
 
@@ -224,16 +223,11 @@ drive_deauth()
 for (i in seq_len(nrow(public_files))) {
   destination <- file.path(raw_dir, public_files$output_name[i])
   
-  # Quiet googledrive's own messages, which print the full local save path,
-  # and report the location relative to the project folder instead.
-  googledrive::with_drive_quiet(
-    drive_download(
-      file = as_id(public_files$id[i]),
-      path = destination,
-      overwrite = TRUE
-    )
+  drive_download(
+    file = as_id(public_files$id[i]),
+    path = destination,
+    overwrite = TRUE
   )
-  cat("Downloaded:", fs::path_rel(destination, start = project_dir), "\n")
 }
 
 # Unzip downloaded archives -----------------------------------------------------
@@ -1478,7 +1472,7 @@ workflow_notes <- c(
   sprintf("- Overall category matches: %s", overall_matches)
 )
 writeLines(workflow_notes, file.path(provenance_dir, "workflow_notes.md"))
-cat("Provenance files written to:", fs::path_rel(provenance_dir, start = project_dir), "\n")
+cat("Provenance files written to:", provenance_dir, "\n")
 ```
 
 ## Step 13: Final outputs
@@ -1561,12 +1555,11 @@ cat(
 )
 ```
 
-
 ## How to cite and licence
 
 If you use this workflow, please cite it as:
 
-> Singh, A. R. (2026). *Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment* [Computational workflow]. Ecosystem Indicator Workflows project. <https://github.com/Ecosystem-Indicators-Workflows/workflow_example_Gidgee>
+> Singh, A. R. (2026). *Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment* (Version **TODO: 0.1.0**) \[Computational workflow\]. Ecosystem Indicator Workflows project. **TODO: DOI.** <https://github.com/Ecosystem-Indicators-Workflows/workflow_example_Gidgee>
 
 Please also cite the original assessment (Wardle et al. 2015) and the data sources above.
 
@@ -1574,15 +1567,17 @@ Please also cite the original assessment (Wardle et al. 2015) and the data sourc
 - **Text, figures and derived outputs:** Creative Commons Attribution 4.0 International (CC BY 4.0).
 - **Input data:** remain under their original licences (see [Data sources](#data-sources)).
 
-**Acknowledgements.** This workflow was developed in the Ecosystem Indicator Workflows project, supported by the Australian Research Data Commons (ARDC). It builds on TERN CoESRA Case Study 2 and the original BCCVL / Kepler workflow.
+**Acknowledgements.** This workflow was developed in the Ecosystem Indicator Workflows project, supported by the Australian Research Data Commons (ARDC). **TODO: add the ARDC project code, funding statement and DOI exactly as required by the ARDC, and any partner acknowledgements.** It builds on TERN CoESRA Case Study 2 and the original BCCVL / Kepler workflow.
 
 ## References
 
-- Bland, L. M., Keith, D. A., Miller, R. M., Murray, N. J. & Rodríguez, J. P. (Eds.) (2017). *Guidelines for the application of IUCN Red List of Ecosystems Categories and Criteria*, version 1.1. IUCN, Gland, Switzerland. <https://doi.org/10.2305/IUCN.CH.2016.RLE.3.en>
-- Hijmans, R. J., Phillips, S., Leathwick, J. & Elith, J. *dismo: Species Distribution Modeling*. R package. <https://doi.org/10.32614/CRAN.package.dismo>
+- Bland, L. M., Keith, D. A., Miller, R. M., Murray, N. J. & Rodríguez, J. P. (Eds.) (2017). *Guidelines for the application of IUCN Red List of Ecosystems Categories and Criteria*, version 1.1. IUCN, Gland, Switzerland. **TODO: check version and DOI.**
+- Department of the Environment (2012). *Interim Biogeographic Regionalisation for Australia (IBRA), version 7*. Australian Government, Canberra.
+- Hijmans, R. J., Phillips, S., Leathwick, J. & Elith, J. *dismo: Species Distribution Modeling*. R package. **TODO: version from `citation("dismo")`.**
 - Keith, D. A., Rodríguez, J. P., Rodríguez-Clark, K. M., et al. (2013). Scientific foundations for an IUCN Red List of Ecosystems. *PLoS ONE*, 8(5), e62111. <https://doi.org/10.1371/journal.pone.0062111>
 - Keith, D. A., Ferrer-Paris, J. R., Nicholson, E., et al. (2022). A function-based typology for Earth's ecosystems. *Nature*, 610, 513–518. <https://doi.org/10.1038/s41586-022-05318-4>
-- Phillips, S. J., Anderson, R. P. & Schapire, R. E. (2006). Maximum entropy modeling of species geographic distributions. *Ecological Modelling*, 190(3–4), 231–259. <https://doi.org/10.1016/j.ecolmodel.2005.03.026>
-- Phillips, S. J., Anderson, R. P., Dudík, M., Schapire, R. E. & Blair, M. E. (2017). Opening the black box: an open-source release of Maxent. *Ecography*, 40(7), 887–893. <https://doi.org/10.1111/ecog.03049>
+- Phillips, S. J., Anderson, R. P. & Schapire, R. E. (2006). Maximum entropy modeling of species geographic distributions. *Ecological Modelling*, 190, 231–259. <https://doi.org/10.1016/j.ecolmodel.2005.03.026>
+- Phillips, S. J., Anderson, R. P., Dudík, M., Schapire, R. E. & Blair, M. E. (2017). Opening the black box: an open-source release of Maxent. *Ecography*, 40, 887–893. <https://doi.org/10.1111/ecog.03049>
 - TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>
-- Wardle, G. M., Greenville, A. C., Frank, A. S. K., Tischler, M., Emery, N. J. & Dickman, C. R. (2015). Ecosystem risk assessment of Georgina gidgee woodlands in central Australia. *Austral Ecology*, 40(4), 444–459. <https://doi.org/10.1111/aec.12265>
+- Wardle, G. M., et al. (2015). Ecosystem risk assessment of Georgina gidgee woodlands. *Austral Ecology*. <https://doi.org/10.1111/aec.12265> **TODO: complete author list, volume and pages.**
+- **TODO:** occurrence data download (GBIF / ALA) and climate, soil and IBRA dataset citations from the Data sources table.

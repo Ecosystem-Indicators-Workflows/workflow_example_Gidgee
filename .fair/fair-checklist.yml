@@ -9,7 +9,7 @@ name:
 public: false
 
 # Public web page for the workflow: Quarto site, WorkflowHub or catalogue entry.
-website:
+website: https://ecosystem-indicators-workflows.github.io/workflow_example_Gidgee/ 
 
 # File formats the workflow writes, if outputs are not committed (e.g. [csv, tif]).
 formats: [csv, tif, geojson]
