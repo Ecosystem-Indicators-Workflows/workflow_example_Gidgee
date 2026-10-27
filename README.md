@@ -1,4 +1,4 @@
-Run Workflow:
+## Run Workflow:
 1. copy the repository link
 2. open a new project with git version history
 3. choose local file path as you please
@@ -7,7 +7,7 @@ Run Workflow:
 6. Click render option and get a cuppa, it will take 6-12 mins
 7. `html` file will be opened automaticlaly in your default browser.
 
-Workflow Steps taken to re-design:
+ Workflow Steps taken to re-design:
 
 Species: 
 1. Georgina gidgee (Acacia georginae F.M.Bailey) occurrences from GBIF on 13-Aug-2026-02:38:46.080849
@@ -39,3 +39,7 @@ Re-reunning this workflow
 - clone the repository
 - unzip the data folder(path should match otherwise if facing error check paths)
 - Run Component 1 SDM
+
+## Fair Check
+<!-- FAIR:START -->
+<!-- FAIR:END -->

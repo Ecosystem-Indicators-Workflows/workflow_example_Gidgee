@@ -7,3 +7,13 @@ output/
 Data_IUCNGeorginaGidgee.zip
 teams
 .Rproj.user
+
+# Folders created by the workflow (dir.create in Gidgee_workflow_2026.qmd / .R)
+data/raw/
+data/processed/
+provenance/
+results/
+
+# Quarto render leftovers
+*.rmarkdown
+Gidgee_workflow_2026_files/

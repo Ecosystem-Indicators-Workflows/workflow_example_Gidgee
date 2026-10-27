@@ -1,6 +1,10 @@
 ---
 title: "test_workflow"
 format: html
+  html:
+    toc: true
+    code-fold: true      # code hidden behind "Show code", outputs visible
+    code-tools: true
 editor: visual
 ---
 
