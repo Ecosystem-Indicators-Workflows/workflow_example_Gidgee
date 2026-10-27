@@ -44,20 +44,19 @@ Re-reunning this workflow
 <!-- FAIR:START -->
 ## FAIR assessment
 
-[![FAIR checklist badge](https://fairsoftwarechecklist.net/badge.svg)](https://fairsoftwarechecklist.net/v0.2?f=21&a=30110&i=30001&r=022) ![EIW FAIR score](https://img.shields.io/badge/EIW%20FAIR-16%2F33-orange)
+[![FAIR checklist badge](https://fairsoftwarechecklist.net/badge.svg)](https://fairsoftwarechecklist.net/v0.2?f=31&a=30110&i=30001&r=022) ![EIW FAIR score](https://img.shields.io/badge/EIW%20FAIR-17%2F33-orange)
 
-**16 / 33 points · 6 / 15 questions at EIW target** · not yet at EIW minimum
+**17 / 33 points · 7 / 15 questions at EIW target** · not yet at EIW minimum
 
 | Principle | Score | EIW target |
 |---|---|---|
-| Findable | 3 / 4 (75%) | 4 / 4 |
+| Findable | 4 / 4 (100%) | 4 / 4 |
 | Accessible | 5 / 10 (50%) | 10 / 10 |
 | Interoperable | 4 / 12 (33%) | 12 / 12 |
 | Reusable | 4 / 7 (57%) | 6 / 7 |
 
-<details><summary>Gaps to close (9)</summary>
+<details><summary>Gaps to close (8)</summary>
 
-- **f:q0 Indexed by search engines** (2 / 3): No web page with SEO (Quarto site / WorkflowHub)
 - **a:q1 Persistent identifier (DOI)** (0 / 2): No DOI: a GitHub URL can move or vanish
 - **a:q4 Identifier in metadata** (0 / 3): No workflow name or ID in metadata (no CITATION.cff)
 - **i:q1 Versioning scheme** (0 / 2): No git tags or version numbers
@@ -71,5 +70,5 @@ Re-reunning this workflow
 
 ![FAIR scores per question](fair/fair-scores.png)
 
-<sub>Updated 2026-10-27 from commit `56f49d3` by `.fair/fair_check.R`. Edit `.fair/fair-checklist.yml`, not this block.</sub>
+<sub>Updated 2026-10-27 from commit `1d2ee77` by `.fair/fair_check.R`. Edit `.fair/fair-checklist.yml`, not this block.</sub>
 <!-- FAIR:END -->

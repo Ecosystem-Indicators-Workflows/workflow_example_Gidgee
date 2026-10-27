@@ -1,20 +1,20 @@
 {
   "repository": "Ecosystem-Indicators-Workflows/workflow_example_Gidgee",
-  "commit": "56f49d3",
+  "commit": "1d2ee77",
   "date": "2026-10-27",
   "checklist": "ARDC FAIR Software Checklist v0.2",
-  "ardc_url": "https://fairsoftwarechecklist.net/v0.2?f=21&a=30110&i=30001&r=022",
-  "total": 16,
+  "ardc_url": "https://fairsoftwarechecklist.net/v0.2?f=31&a=30110&i=30001&r=022",
+  "total": 17,
   "total_max": 33,
-  "questions_met": 6,
+  "questions_met": 7,
   "all_met": false,
   "principles": [
     {
       "principle": "Findable",
-      "current": 3,
+      "current": 4,
       "target": 4,
       "max": 4,
-      "pct": 75,
+      "pct": 100,
       "_row": "Findable"
     },
     {
@@ -46,12 +46,12 @@
     {
       "id": "f:q0",
       "label": "Indexed by search engines",
-      "current": 2,
+      "current": 3,
       "target": 3,
       "max": 3,
-      "met": false,
-      "has": "Hosted on GitHub (basic search indexing)",
-      "needs": "No web page with SEO (Quarto site / WorkflowHub)"
+      "met": true,
+      "has": "Web page: https://ecosystem-indicators-workflows.github.io/workflow_example_Gidgee/",
+      "needs": ""
     },
     {
       "id": "f:q1",
