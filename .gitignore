@@ -17,3 +17,7 @@ results/
 # Quarto render leftovers
 *.rmarkdown
 Gidgee_workflow_2026_files/
+test_local.r
+
+/.quarto/
+**/*.quarto_ipynb
