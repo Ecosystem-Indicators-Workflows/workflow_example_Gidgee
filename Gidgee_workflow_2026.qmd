@@ -160,7 +160,8 @@ required_packages <- c(
   "xml2",        # Parses the preserved Kepler workflow XML for Step 9.
   "dismo",       # Supports species-distribution modelling.
   "maps",        # Provides geographic map data.
-  "leaflet"      # Provides interactive map outputs.
+  "leaflet",     # Provides interactive map outputs.
+  "rJava"        # Provides 
 )
 
 is_installed <- function(pkg) nzchar(system.file(package = pkg))
