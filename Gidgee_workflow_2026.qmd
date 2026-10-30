@@ -1,6 +1,9 @@
 ---
-title: "Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment"
+title: "Georgina gidgee woodlands: predicted change in bioclimatically suitable habitat for assessment of risk of collapse"
 subtitle: "Reproduction of the 2015 assessment with MaxEnt under current and future climate"
+keywords:
+  - IUCN Red List of Ecosystems
+  - Climate Change
 author:
   - name: Abhimanyu Raj Singh
     orcid: 0000-0002-2279-7060
@@ -31,7 +34,7 @@ format:
     code-fold: true      # code hidden behind "Show code", outputs visible
     code-tools: true
 execute: 
-  eval: false
+  eval: true # switch to false for testing style/layout 
 editor: visual
 bibliography: 
   - bibTeX/references.bib 
@@ -46,11 +49,11 @@ TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au
 :::
 
 - **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia. A type belonging to the [T5.3 Sclerophyll hot deserts and semi-deserts](https://w3id.org/iucn-get/EFG_T5_3) ecosystem functional group [@Keith_2022_Ecosystem_Typology].
-- **Questions:** Is the ecosystem threatened under the IUCN Red List of Ecosystems criteria A–E [@IUCN_2024;Keith_2013], and how might the area of suitable climate change under future scenarios?
+- **Questions:** To investigate the effects of climate change on habitat suitability of *A. georginae* woodlands. Estimate risk of collapse under the IUCN Red List of Ecosystems criteria [@IUCN_2024;@Keith_2013].
 - **Method:**
-  1.  Download and validate the occurrence records.
+  1.  Download and validate the occurrence records for the keystone species.
   2.  Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B [@IUCN_2024].
-  3.  Fit a MaxEnt species distribution model [@pkg_dismo;@PHILLIPS2006231;@Phillips_2017] to baseline climate (c. 2000), soil type and IBRA bioregion [@IBRA7].
+  3.  Fit a MaxEnt habitat suitability model [@pkg_dismo;@PHILLIPS2006231;@Phillips_2017] to baseline climate (c. 2000), soil type and IBRA bioregion [@IBRA7].
   4.  Project the model to 19 future climate scenarios from CSIRO Mk3.6: SRES A1B for 2030, 2050 and 2070, and RCP 2.6, 4.5, 6.0 and 8.5 for 2030, 2050, 2070 and 2080.
   5.  Combine the results with the documented evidence from the 2015 assessment and assign IUCN categories.
   6.  Compare the result with the published assessment [@Wardle_2015].
@@ -195,7 +198,7 @@ required_packages <- c(
   "raster",      # Handles raster environmental data.
   "sf",          # Handles coordinate reference systems and projections.
   "xml2",        # Parses the preserved Kepler workflow XML for Step 9.
-  "dismo",       # Supports species-distribution modelling.
+  "dismo",       # Supports habitat suitability modelling.
   "maps",        # Provides geographic map data.
   "leaflet",     # Provides interactive map outputs.
   "rJava"        # Provides low-Level R to Java Interface
@@ -616,12 +619,12 @@ draw_aoo_map()
 dev.off()
 ```
 
-## Step 6: Prepare the species distribution model
+## Step 6: Prepare the habitat suitability model
 
 Checks that MaxEnt is available, formats the presence points, and aligns all 19 future-climate layer sets with the baseline grid before any model is run. Modelling settings and software versions are recorded.
 
 ```{r}
-#| label: Step 6 Prepare the species-distribution model
+#| label: Step 6 Prepare the habitat suitability model
 
 # Confirm MaxEnt is available before going further -------------------------------------
 maxent_jar_path <- file.path(system.file("java", package = "dismo"), "maxent.jar")
