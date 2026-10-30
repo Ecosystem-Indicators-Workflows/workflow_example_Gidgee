@@ -7,7 +7,7 @@ date: 30 Oct 2026
 
 I used three lines of code in the command line / terminal in my laptop:
 
-```
+```bash
 git clone https://github.com/Ecosystem-Indicators-Workflows/workflow_example_Gidgee.git
 cd workflow_example_Gidgee
 quarto render Gidgee_workflow_2026.qmd
@@ -15,14 +15,14 @@ quarto render Gidgee_workflow_2026.qmd
 
 First try failed:
 
-```
+```R
 ...
-20/35 [Step 7 Run the baseline SDM]  
+20/35 [Step 7 Run the baseline SDM]
 `Failed with error:  'there is no package called 'rJava''`
 ...
 ```
 
-How I Fixed it: 
+How I Fixed it:
 
 added `rJava` to the vector of required packages in code block `[Step 0 Requirements]`
 
@@ -30,7 +30,7 @@ added `rJava` to the vector of required packages in code block `[Step 0 Requirem
 
 ### Context of the successful run
 
-```
+```markdown
 # Resource usage
 
 ## Time
@@ -55,7 +55,7 @@ Total footprint this run touched:  2798 MB
 
 My session info
 
-```
+```R
 ─ Session info ───────────────────────────────────────────────────────────────
  setting  value
  version  R version 4.5.2 (2025-10-31)
