@@ -16,7 +16,9 @@ results/
 
 # Quarto render leftovers
 *.rmarkdown
-Gidgee_workflow_2026_files/
+# ignore if they are in local folder, but accept the ones in docs/
+/*_files/ 
+/*.html
 test_local.r
 
 /.quarto/
