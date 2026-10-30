@@ -75,6 +75,7 @@ This workflow does not crop to those regions. The supplied IBRA grid holds numer
 Starts the run timer and configures Java (8 GB memory, headless mode) before MaxEnt loads.
 
 ```{r}
+#| label: Session setup
 # Record the complete script runtime from the first executable step.
 t_start <- Sys.time()
 
@@ -105,10 +106,6 @@ Defines the project folders relative to the working directory and creates them i
 
 ```{r}
 #| label: Setup
-# ============================================================================
-# Setup
-# ============================================================================
-
 # Configuration ---------------------------------------------------------------
 # Use the directory from which this script/notebook is being run as the
 # project directory. This avoids using the old CoESRA file paths.
@@ -147,9 +144,7 @@ dir.create(results_tables_dir, recursive = TRUE, showWarnings = FALSE)
 Installs any missing R packages and loads them.
 
 ```{r}
-# ============================================================================
-# Step 0 Requirements
-# ============================================================================
+#| label: Step 0 Requirements
 
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 
@@ -165,7 +160,8 @@ required_packages <- c(
   "xml2",        # Parses the preserved Kepler workflow XML for Step 9.
   "dismo",       # Supports species-distribution modelling.
   "maps",        # Provides geographic map data.
-  "leaflet"      # Provides interactive map outputs.
+  "leaflet",     # Provides interactive map outputs.
+  "rJava"        # Provides 
 )
 
 is_installed <- function(pkg) nzchar(system.file(package = pkg))
@@ -194,9 +190,7 @@ library(leaflet)
 Downloads the two public case-study archives from Google Drive (no login required), extracts them into `data/raw/`, and records an inventory of every file with its SHA-256 checksum for provenance.
 
 ```{r}
-# ============================================================================
-# Step 1 Get data
-# ============================================================================
+#| label: Step 1 Get data
 
 # Public file identifiers -----------------------------------------------------
 # These IDs come from the public links supplied for Case 2.
@@ -292,12 +286,10 @@ write.csv(
 Identifies the occurrence CSV, the baseline, A1B and AR5 climate layers and the original Kepler workflow files, then plots every baseline layer to confirm it is readable.
 
 ```{r}
+#| label: Step 2 Inspect the downloaded files
 #| fig-width: 12
 #| fig-height: 14
 
-# ============================================================================
-# Step 2 Inspect the downloaded files
-# ============================================================================
 
 # List all extracted files -----------------------------------------------------
 # Exclude the original ZIP archives and macOS zip metadata (__MACOSX).
@@ -383,9 +375,7 @@ raster::plot(
 Checks the coordinates for missing values, duplicates and points outside mainland Australia, removes invalid records and saves the cleaned table.
 
 ```{r}
-# ============================================================================
-# Step 3 Load and validate occurrence data
-# ============================================================================
+#| label: Step 3 Load and validate occurrence data
 
 # Load the occurrence CSV ---------------------------------------------------------
 occurrences_raw <- readr::read_csv(occurrence_csv, show_col_types = FALSE)
@@ -450,9 +440,7 @@ readr::write_csv(occurrence_validation, file.path(provenance_dir, "occurrence_va
 Projects the occurrence points from WGS84 to GDA94 / Australian Albers (EPSG:3577), so the area calculations in Step 5 use true 10 × 10 km cells.
 
 ```{r}
-# ============================================================================
-# Step 4 Define the analysis projection
-# ============================================================================
+#| label: Step 4 Define the analysis projection
 
 # Read the occurrence coordinates -----------------------------------------------------
 # The occurrence CSV and the baseline .asc rasters are both supplied in
@@ -497,9 +485,7 @@ print(head(projected_coords))
 Calculates the extent of occurrence (EOO, convex hull around the records) and area of occupancy (AOO, number of occupied 10 × 10 km cells). Threat-defined locations (B3) cannot be calculated from these inputs and are recorded as unavailable.
 
 ```{r}
-# ============================================================================
-# Step 5 Calculate Criterion B spatial indicators
-# ============================================================================
+#| label: Step 5 Calculate Criterion B spatial indicators
 
 # --- B1 Extent of occurrence ---------------------------------------------------------
 
@@ -598,9 +584,7 @@ dev.off()
 Checks that MaxEnt is available, formats the presence points, and aligns all 19 future-climate layer sets with the baseline grid before any model is run. Modelling settings and software versions are recorded.
 
 ```{r}
-# ============================================================================
-# Step 6 Prepare the species-distribution model
-# ============================================================================
+#| label: Step 6 Prepare the species-distribution model
 
 # Confirm MaxEnt is available before going further -------------------------------------
 maxent_jar_path <- file.path(system.file("java", package = "dismo"), "maxent.jar")
@@ -795,9 +779,7 @@ readr::write_csv(analysis_parameters, file.path(provenance_dir, "analysis_parame
 Fits MaxEnt to the occurrence records and baseline climate, treating IBRA bioregion and soil type as categorical, and saves the model, predictions and a baseline suitability map.
 
 ```{r}
-# ============================================================================
-# Step 7 Run the baseline SDM
-# ============================================================================
+#| label: Step 7 Run the baseline SDM
 
 # Run MaxEnt using the occurrence data and baseline climate layers ------------------------
 # ibra and soil are categorical (bioregion / soil-type codes), so they are
@@ -863,12 +845,9 @@ plot(sf::st_geometry(occurrence_points_wgs84), add = TRUE, pch = 16, col = "blac
 Projects the baseline model onto each A1B and AR5 scenario, converts suitability to suitable / unsuitable with MaxEnt's maximum training sensitivity plus specificity threshold, and compares the suitable area with the baseline.
 
 ```{r}
+#| label: Step 8 Run future climate scenarios
 #| fig-width: 10
 #| fig-height: 8
-
-# ============================================================================
-# Step 8 Run future climate scenarios
-# ============================================================================
 
 # Binary suitable/unsuitable threshold -------------------------------------------------
 # Use MaxEnt's own "Maximum training sensitivity plus specificity" threshold
@@ -987,9 +966,8 @@ cat(
 Baseline and every future scenario on one 0–1 suitability scale. Only the baseline is shown at first; use the layer control (top right) to switch scenarios on and off.
 
 ```{r}
-# ============================================================================
-# Interactive comparison map — baseline vs. every future scenario
-# ============================================================================
+#| label: Interactive comparison map — baseline vs. every future scenario
+
 # All layers share one colour scale (0-1 cloglog suitability) so toggling
 # between them is a fair visual comparison. Only the baseline is shown by
 # default; use the layer control (top right) to switch scenarios on/off.
@@ -1042,9 +1020,7 @@ comparison_map
 Assesses criteria A–E. Criteria B and C use this workflow's calculations. Criteria A, D and E use the documented evidence from the original 2015 assessment, preserved in the Kepler workflow XML, rather than being derived from the model.
 
 ```{r}
-# ============================================================================
-# Step 9 Assess IUCN criteria
-# ============================================================================
+#| label: Step 9 Assess IUCN criteria
 
 # Parse the preserved Kepler XML for the original assessors' own
 # per-subcriterion conclusions and literature basis -----------------------------
@@ -1149,9 +1125,7 @@ print(criterion_E_assessment)
 Maps each subcriterion onto the original workflow's 0–4 scale and applies the precautionary rule: the most severe determinate category drives each criterion and the overall result. The Criterion B conclusion still needs checking against the official IUCN threshold table.
 
 ```{r}
-# ============================================================================
-# Step 10 Convert criterion results to assessment categories
-# ============================================================================
+#| label: Step 10 Convert criterion results to assessment categories
 
 # Use the original mapping -------------------------------------------------------
 # This is the exact 0-4 scale documented in the preserved Kepler workflow's
@@ -1277,9 +1251,7 @@ readr::write_csv(final_assessment, file.path(results_tables_dir, "final_assessme
 Compares this result with the published 2015 assessment (Wardle et al. 2015) and records the likely cause of each difference.
 
 ```{r}
-# ============================================================================
-# Step 11 Compare with the original assessment
-# ============================================================================
+#| label: Step 11 Compare with the original assessment
 
 # The published 2015 assessment's result, as stated in the case-study
 # reference material (not recalculated — this is the historical record).
@@ -1332,9 +1304,7 @@ readr::write_csv(comparison_notes, file.path(provenance_dir, "comparison_notes.c
 Saves session information, run time, memory and disk use, the original Kepler workflow XML and notes on methodological decisions to `provenance/`.
 
 ```{r}
-# ============================================================================
-# Step 12 Record provenance
-# ============================================================================
+#| label: Step 12 Record provenance
 
 # Session information ---------------------------------------------------------------
 writeLines(
@@ -1480,9 +1450,8 @@ cat("Provenance files written to:", provenance_dir, "\n")
 Checks the project folder structure against the expected layout and writes a README if one does not exist.
 
 ```{r}
-# ============================================================================
-# Step 13 Final outputs
-# ============================================================================
+#| label: Step 13 Final outputs
+
 
 # Check the final project structure against the expected layout -----------------------
 # Adapted to this project's actual environment: a Quarto (.qmd) notebook run

@@ -1,0 +1,35 @@
+---
+title: Test 1.1
+description: Running on head with sha `699dd438b10a63d2080ac3c1066689a3954a9a47`
+subtitle: Reproducibility notes
+author: Elliot Gould
+date: 30 Oct 2026
+format: gfm
+---
+
+Running on head with sha `699dd438b10a63d2080ac3c1066689a3954a9a47`
+
+I cloned the repository using GitHub Desktop v3.6.4. (arm64).
+Was prompted to initialise repo with LFS in the GUI. Accepted. Switched to branch test-reproducibility.
+
+Then ran in terminal from within poisitron opened to root dir of repo.
+
+```bash
+quarto render Gidgee_workflow_2026.qmd
+```
+
+::: {.callout-note}
+First try succeeded!
+:::
+
+# Context of the successful run
+
+```markdown
+{{< include ../provenance/runtime.txt >}}
+```
+
+## My session info
+
+```R
+{{< include ../provenance/sessioninfo.txt >}}
+```
