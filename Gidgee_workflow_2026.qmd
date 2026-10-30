@@ -9,7 +9,7 @@ author:
       - id: qcif
         name: QCIF
       - ref: ces
-  - name: "J. R. Ferrer-Paris"
+  - name: "J.R. Ferrer-Paris"
     email: j.ferrer@unsw.edu.au
     orcid: 0000-0002-9554-3395
     affiliations:
@@ -21,6 +21,8 @@ author:
         name: IUCN Commission on Ecosystem Management
         city: Gland
         country: Switzerland 
+citation: 
+ url: https://ecosystem-indicators-workflows.github.io/workflow_example_Gidgee/
 date: last-modified
 license: "CC BY 4.0"
 format:
