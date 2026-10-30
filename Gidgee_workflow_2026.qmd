@@ -1561,16 +1561,10 @@ cat(
 )
 ```
 
-## How to cite and licence
-
-If you use this workflow, please cite it as:
-
-> Singh, A. R. (2026). *Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment* (Version **TODO: 0.1.0**) \[Computational workflow\]. Ecosystem Indicator Workflows project. **TODO: DOI.** <https://github.com/Ecosystem-Indicators-Workflows/workflow_example_Gidgee>
-
-Please also cite the original assessment [@Wardle_2015] and the data sources above.
+## License
 
 - **Code:** Apache License 2.0 (see `LICENSE`).
-- **Text, figures and derived outputs:** Creative Commons Attribution 4.0 International (CC BY 4.0).
+- **Text, figures and derived outputs:** Creative Commons Attribution 4.0 International (CC BY 4.0). See citation information below, please also cite the original assessment [@Wardle_2015] and the data sources above.
 - **Input data:** remain under their original licences (see [Data sources](#data-sources)).
 
 **Acknowledgements.** This workflow builds on TERN CoESRA Case Study 2 and the original BCCVL / Kepler workflow.
