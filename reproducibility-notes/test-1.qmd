@@ -1,10 +1,11 @@
-# Reproducibility notes
+---
+title: Test 1
+subtitle: Reproducibility notes
+author: JR Ferrer-Paris
+date: 30 Oct 2026
+---
 
-## Test 1
-
-JR Ferrer-Paris /  30 Oct 2026
-
-Three lines of code in the command line / terminal:
+I used three lines of code in the command line / terminal in my laptop:
 
 ```
 git clone https://github.com/Ecosystem-Indicators-Workflows/workflow_example_Gidgee.git
@@ -13,14 +14,19 @@ quarto render Gidgee_workflow_2026.qmd
 ```
 
 First try failed:
+
 ```
+...
 20/35 [Step 7 Run the baseline SDM]  
 `Failed with error:  'there is no package called 'rJava''`
+...
 ```
 
-Fixed: added `rJava` to the vector of required packages in [Step 0 Requirements]
+How I Fixed it: 
 
-Second try succeeded!
+added `rJava` to the vector of required packages in code block `[Step 0 Requirements]`
+
+***Second try succeeded!***
 
 ### Context of the successful run
 
