@@ -1,7 +1,31 @@
 ---
-title: "Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment"
+title: "Georgina gidgee woodlands: predicted change in bioclimatically suitable habitat for assessment of risk of collapse"
 subtitle: "Reproduction of the 2015 assessment with MaxEnt under current and future climate"
-author: "Abhimanyu Raj Singh"
+keywords:
+  - IUCN Red List of Ecosystems
+  - Climate Change
+author:
+  - name: Abhimanyu Raj Singh
+    orcid: 0000-0002-2279-7060
+    corresponding: true
+    affiliations: 
+      - id: qcif
+        name: QCIF
+      - ref: ces
+  - name: "J.R. Ferrer-Paris"
+    email: j.ferrer@unsw.edu.au
+    orcid: 0000-0002-9554-3395
+    affiliations:
+      - id: ces
+        name: Centre for Ecosystem Science, UNSW Sydney
+        city: Sydney
+        country: Australia
+      - id: iucn
+        name: IUCN Commission on Ecosystem Management
+        city: Gland
+        country: Switzerland 
+citation: 
+ url: https://ecosystem-indicators-workflows.github.io/workflow_example_Gidgee/
 date: last-modified
 license: "CC BY 4.0"
 format:
@@ -9,30 +33,46 @@ format:
     toc: true
     code-fold: true      # code hidden behind "Show code", outputs visible
     code-tools: true
+execute: 
+  eval: true # switch to false for testing style/layout 
 editor: visual
+bibliography: 
+  - bibTeX/references.bib 
 ---
 
 ## About this workflow
 
-This notebook reproduces the IUCN Red List of Ecosystems assessment of Georgina gidgee woodlands (Wardle et al. 2015) as an open, re-runnable R workflow. It is rebuilt from TERN CoESRA Case Study 2 as part of the Ecosystem Indicator Workflows (EIW) project.
+This notebook reproduces the IUCN Red List of Ecosystems assessment of Georgina gidgee woodlands [@Wardle_2015] as an open, re-runnable R workflow. It is rebuilt from TERN CoESRA Case Study 2 [@GURU2016221] as part of the Ecosystem Indicator Workflows (EIW) project. 
 
-- **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia. IUCN Global Ecosystem Typology functional group: **TODO: confirm GET code**.
-- **Questions:** Is the ecosystem threatened under the IUCN Red List of Ecosystems criteria A–E, and how might the area of suitable climate change under future scenarios?
+:::{.aside}
+TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>
+:::
+
+- **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia. A type belonging to the [T5.3 Sclerophyll hot deserts and semi-deserts](https://w3id.org/iucn-get/EFG_T5_3) ecosystem functional group [@Keith_2022_Ecosystem_Typology].
+- **Questions:** To investigate the effects of climate change on habitat suitability of *A. georginae* woodlands. Estimate risk of collapse under the IUCN Red List of Ecosystems criteria [@IUCN_2024;@Keith_2013].
 - **Method:**
-  1.  Download and validate the occurrence records.
-  2.  Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B.
-  3.  Fit a MaxEnt species distribution model to baseline climate (c. 2000), soil type and IBRA bioregion.
+  1.  Download and validate the occurrence records for the keystone species.
+  2.  Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B [@IUCN_2024].
+  3.  Fit a MaxEnt habitat suitability model [@pkg_dismo;@PHILLIPS2006231;@Phillips_2017] to baseline climate (c. 2000), soil type and IBRA bioregion [@IBRA7].
   4.  Project the model to 19 future climate scenarios from CSIRO Mk3.6: SRES A1B for 2030, 2050 and 2070, and RCP 2.6, 4.5, 6.0 and 8.5 for 2030, 2050, 2070 and 2080.
   5.  Combine the results with the documented evidence from the 2015 assessment and assign IUCN categories.
-  6.  Compare the result with the published assessment.
+  6.  Compare the result with the published assessment [@Wardle_2015].
 - **Outputs:** maps, rasters, model files and tables in `results/`; data inventory, parameters, session information and workflow notes in `provenance/`.
-- **Requirements:** R with Java (MaxEnt runs through `rJava`), about 8 GB of memory for Java, about 3 GB of free disk space for the downloaded data, and internet access for Step 1. Run time and peak memory are recorded in `provenance/`. **TODO: add tested R version and typical run time.**
+- **Requirements:** R with Java (MaxEnt runs through `rJava`), about 8 GB of memory for Java, about 3 GB of free disk space for the downloaded data, and internet access for Step 1. Run time and peak memory are recorded in `provenance/`. 
 
+:::{.aside}
 To run the workflow, open this file in RStudio and render it, or run `quarto render Gidgee_workflow_2026.qmd` from the repository root. Step 0 installs any missing R packages into your R library.
+
+**TODO: add tested R version and typical run time.**
+:::
 
 ## Data sources {#data-sources}
 
 All inputs are downloaded in Step 1 from two public archives supplied with TERN CoESRA Case Study 2.
+
+:::{.aside}
+- **TODO:** occurrence data download (GBIF / ALA) and climate, soil and IBRA dataset citations from the Data sources table.
+:::
 
 | Data | Source | Used for | Licence and attribution |
 |--------------|--------------|--------------|-------------------------------|
@@ -158,10 +198,10 @@ required_packages <- c(
   "raster",      # Handles raster environmental data.
   "sf",          # Handles coordinate reference systems and projections.
   "xml2",        # Parses the preserved Kepler workflow XML for Step 9.
-  "dismo",       # Supports species-distribution modelling.
+  "dismo",       # Supports habitat suitability modelling.
   "maps",        # Provides geographic map data.
   "leaflet",     # Provides interactive map outputs.
-  "rJava"        # Provides 
+  "rJava"        # Provides low-Level R to Java Interface
 )
 
 is_installed <- function(pkg) nzchar(system.file(package = pkg))
@@ -579,12 +619,12 @@ draw_aoo_map()
 dev.off()
 ```
 
-## Step 6: Prepare the species distribution model
+## Step 6: Prepare the habitat suitability model
 
 Checks that MaxEnt is available, formats the presence points, and aligns all 19 future-climate layer sets with the baseline grid before any model is run. Modelling settings and software versions are recorded.
 
 ```{r}
-#| label: Step 6 Prepare the species-distribution model
+#| label: Step 6 Prepare the habitat suitability model
 
 # Confirm MaxEnt is available before going further -------------------------------------
 maxent_jar_path <- file.path(system.file("java", package = "dismo"), "maxent.jar")
@@ -1524,29 +1564,12 @@ cat(
 )
 ```
 
-## How to cite and licence
-
-If you use this workflow, please cite it as:
-
-> Singh, A. R. (2026). *Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment* (Version **TODO: 0.1.0**) \[Computational workflow\]. Ecosystem Indicator Workflows project. **TODO: DOI.** <https://github.com/Ecosystem-Indicators-Workflows/workflow_example_Gidgee>
-
-Please also cite the original assessment (Wardle et al. 2015) and the data sources above.
+## License
 
 - **Code:** Apache License 2.0 (see `LICENSE`).
-- **Text, figures and derived outputs:** Creative Commons Attribution 4.0 International (CC BY 4.0).
+- **Text, figures and derived outputs:** Creative Commons Attribution 4.0 International (CC BY 4.0). See citation information below, please also cite the original assessment [@Wardle_2015] and the data sources above.
 - **Input data:** remain under their original licences (see [Data sources](#data-sources)).
 
-**Acknowledgements.** This workflow was developed in the Ecosystem Indicator Workflows project, supported by the Australian Research Data Commons (ARDC). **TODO: add the ARDC project code, funding statement and DOI exactly as required by the ARDC, and any partner acknowledgements.** It builds on TERN CoESRA Case Study 2 and the original BCCVL / Kepler workflow.
+**Acknowledgements.** This workflow builds on TERN CoESRA Case Study 2 and the original BCCVL / Kepler workflow.
 
-## References
-
-- Bland, L. M., Keith, D. A., Miller, R. M., Murray, N. J. & Rodríguez, J. P. (Eds.) (2017). *Guidelines for the application of IUCN Red List of Ecosystems Categories and Criteria*, version 1.1. IUCN, Gland, Switzerland. **TODO: check version and DOI.**
-- Department of the Environment (2012). *Interim Biogeographic Regionalisation for Australia (IBRA), version 7*. Australian Government, Canberra.
-- Hijmans, R. J., Phillips, S., Leathwick, J. & Elith, J. *dismo: Species Distribution Modeling*. R package. **TODO: version from `citation("dismo")`.**
-- Keith, D. A., Rodríguez, J. P., Rodríguez-Clark, K. M., et al. (2013). Scientific foundations for an IUCN Red List of Ecosystems. *PLoS ONE*, 8(5), e62111. <https://doi.org/10.1371/journal.pone.0062111>
-- Keith, D. A., Ferrer-Paris, J. R., Nicholson, E., et al. (2022). A function-based typology for Earth's ecosystems. *Nature*, 610, 513–518. <https://doi.org/10.1038/s41586-022-05318-4>
-- Phillips, S. J., Anderson, R. P. & Schapire, R. E. (2006). Maximum entropy modeling of species geographic distributions. *Ecological Modelling*, 190, 231–259. <https://doi.org/10.1016/j.ecolmodel.2005.03.026>
-- Phillips, S. J., Anderson, R. P., Dudík, M., Schapire, R. E. & Blair, M. E. (2017). Opening the black box: an open-source release of Maxent. *Ecography*, 40, 887–893. <https://doi.org/10.1111/ecog.03049>
-- TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>
-- Wardle, G. M., et al. (2015). Ecosystem risk assessment of Georgina gidgee woodlands. *Austral Ecology*. <https://doi.org/10.1111/aec.12265> **TODO: complete author list, volume and pages.**
-- **TODO:** occurrence data download (GBIF / ALA) and climate, soil and IBRA dataset citations from the Data sources table.
+**Funding.** This workflow was developed in the Ecosystem Indicator Workflows project, a co-investment partnership with the Australian Research Data Commons (ARDC) through the Planet Research Data Commons (DOI:[10.3565/j5sq-a757](https://doi.org/10.3565/j5sq-a757)). The ARDC is enabled by the Australian Government’s National Collaborative Research Infrastructure Strategy (NCRIS). 
