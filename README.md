@@ -70,5 +70,5 @@ Re-running this workflow
 
 ![FAIR scores per question](fair/fair-scores.png)
 
-<sub>Updated 2026-10-27 from commit `1d2ee77` by `.fair/fair_check.R`. Edit `.fair/fair-checklist.yml`, not this block.</sub>
+<sub>Updated 2026-10-30 from commit `e954d4a` by `.fair/fair_check.R`. Edit `.fair/fair-checklist.yml`, not this block.</sub>
 <!-- FAIR:END -->
