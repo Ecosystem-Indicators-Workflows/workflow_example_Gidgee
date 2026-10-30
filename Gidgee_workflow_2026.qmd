@@ -1,7 +1,9 @@
 ---
 title: "Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment"
 subtitle: "Reproduction of the 2015 assessment with MaxEnt under current and future climate"
-author: "Abhimanyu Raj Singh"
+author: 
+  - "Abhimanyu Raj Singh"
+  - "JR Ferrer-Paris"
 date: last-modified
 license: "CC BY 4.0"
 format:
@@ -10,18 +12,24 @@ format:
     code-fold: true      # code hidden behind "Show code", outputs visible
     code-tools: true
 editor: visual
+bibliography: 
+  - bibTeX/references.bib 
 ---
 
 ## About this workflow
 
-This notebook reproduces the IUCN Red List of Ecosystems assessment of Georgina gidgee woodlands (Wardle et al. 2015) as an open, re-runnable R workflow. It is rebuilt from TERN CoESRA Case Study 2 as part of the Ecosystem Indicator Workflows (EIW) project.
+This notebook reproduces the IUCN Red List of Ecosystems assessment of Georgina gidgee woodlands (@Wardle_2015) as an open, re-runnable R workflow. It is rebuilt from TERN CoESRA Case Study 2 [@GURU2016221] as part of the Ecosystem Indicator Workflows (EIW) project. 
+
+:::{.aside}
+TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>
+:::
 
 - **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia. IUCN Global Ecosystem Typology functional group: **TODO: confirm GET code**.
 - **Questions:** Is the ecosystem threatened under the IUCN Red List of Ecosystems criteria A–E, and how might the area of suitable climate change under future scenarios?
 - **Method:**
   1.  Download and validate the occurrence records.
   2.  Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B.
-  3.  Fit a MaxEnt species distribution model to baseline climate (c. 2000), soil type and IBRA bioregion.
+  3.  Fit a MaxEnt species distribution model (@pkg_dismo) to baseline climate (c. 2000), soil type and IBRA bioregion.
   4.  Project the model to 19 future climate scenarios from CSIRO Mk3.6: SRES A1B for 2030, 2050 and 2070, and RCP 2.6, 4.5, 6.0 and 8.5 for 2030, 2050, 2070 and 2080.
   5.  Combine the results with the documented evidence from the 2015 assessment and assign IUCN categories.
   6.  Compare the result with the published assessment.
@@ -1573,11 +1581,8 @@ Please also cite the original assessment (Wardle et al. 2015) and the data sourc
 
 - Bland, L. M., Keith, D. A., Miller, R. M., Murray, N. J. & Rodríguez, J. P. (Eds.) (2017). *Guidelines for the application of IUCN Red List of Ecosystems Categories and Criteria*, version 1.1. IUCN, Gland, Switzerland. **TODO: check version and DOI.**
 - Department of the Environment (2012). *Interim Biogeographic Regionalisation for Australia (IBRA), version 7*. Australian Government, Canberra.
-- Hijmans, R. J., Phillips, S., Leathwick, J. & Elith, J. *dismo: Species Distribution Modeling*. R package. **TODO: version from `citation("dismo")`.**
 - Keith, D. A., Rodríguez, J. P., Rodríguez-Clark, K. M., et al. (2013). Scientific foundations for an IUCN Red List of Ecosystems. *PLoS ONE*, 8(5), e62111. <https://doi.org/10.1371/journal.pone.0062111>
 - Keith, D. A., Ferrer-Paris, J. R., Nicholson, E., et al. (2022). A function-based typology for Earth's ecosystems. *Nature*, 610, 513–518. <https://doi.org/10.1038/s41586-022-05318-4>
 - Phillips, S. J., Anderson, R. P. & Schapire, R. E. (2006). Maximum entropy modeling of species geographic distributions. *Ecological Modelling*, 190, 231–259. <https://doi.org/10.1016/j.ecolmodel.2005.03.026>
 - Phillips, S. J., Anderson, R. P., Dudík, M., Schapire, R. E. & Blair, M. E. (2017). Opening the black box: an open-source release of Maxent. *Ecography*, 40, 887–893. <https://doi.org/10.1111/ecog.03049>
-- TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>
-- Wardle, G. M., et al. (2015). Ecosystem risk assessment of Georgina gidgee woodlands. *Austral Ecology*. <https://doi.org/10.1111/aec.12265> **TODO: complete author list, volume and pages.**
 - **TODO:** occurrence data download (GBIF / ALA) and climate, soil and IBRA dataset citations from the Data sources table.
