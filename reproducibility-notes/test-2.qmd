@@ -1,0 +1,53 @@
+---
+title: Test 2
+description: Running on head with sha `2212dc7ea82a2d222c2cbcc8d59858afce931bc0`
+subtitle: Reproducibility notes
+author: JR Ferrer-Paris
+date: 2 Nov 2026
+format: gfm
+---
+
+Running on head with sha `2212dc7ea82a2d222c2cbcc8d59858afce931bc0`
+
+I cloned the repository using `git clone ...`.
+
+Changed to folder `cd workflow_example_Gidgee`
+
+Switched to new branch with `git checkout -b test-repro-linux`
+
+Then ran in bash terminal:
+
+```bash
+quarto render Gidgee_workflow_2026.qmd --output-dir docs  --output index.html
+```
+
+::: {.callout-warning}
+Failed: hit several memory errors!
+:::
+
+Apparently the errors had to do with the local installation of quarto and certain R packages. 
+
+***Fix***:
+
+- download latest version of quarto, then `sudo dpkg -i quarto-1.11.8-linux-amd64.deb`
+- updated packages in ubuntu using the Software Updater
+- updated R packages in R: `update.packages()`
+
+::: {.callout-note}
+
+After those updates, it finally Succeeded!
+
+:::
+
+
+# Context of the successful run
+
+```markdown
+{{< include ../provenance/runtime.txt >}}
+```
+
+## My session info
+
+```R
+{{< include ../provenance/sessionInfo.txt >}}
+```
