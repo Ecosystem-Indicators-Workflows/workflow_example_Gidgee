@@ -37,7 +37,7 @@ execute:
   eval: true # switch to false for testing style/layout 
 editor: visual
 bibliography: 
-  - bibTeX/references.bib 
+  - bibtex/references.bib 
 ---
 
 ## About this workflow
@@ -1373,7 +1373,7 @@ system_ram_mb <- tryCatch(
   as.numeric(system2("sysctl", "-n hw.memsize", stdout = TRUE)) / 2^20,
   error = function(e) NA_real_
 )
-peak_memory_pct_of_ram <- if (is.na(system_ram_mb)) {
+peak_memory_pct_of_ram <- if (is.na(system_ram_mb) || length(system_ram_mb)==0) {
   NA_real_
 } else {
   100 * peak_r_memory_mb / system_ram_mb
