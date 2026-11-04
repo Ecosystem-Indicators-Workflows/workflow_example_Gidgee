@@ -16,7 +16,7 @@ We adopted the original workflow’s components, logic, functions and parameters
 6. Click render option and get a cuppa, it will take 6-12 mins
 7. `html` file will be opened automaticlaly in your default browser.
 
- Workflow Steps taken to re-design:
+ ## Workflow Steps taken to re-design:
 
 Species: 
 1. Georgina gidgee (Acacia georginae F.M.Bailey) occurrences from GBIF on 13-Aug-2026-02:38:46.080849
@@ -44,17 +44,26 @@ Future raster Stack:
 CMIP3/SRES: A1B/CSIRO_mk3.6/2.5_arcmin/{2030,2050,2070}
 CMIP5/AR5: AR5/CSIRO_mk3.6/2.5_arcmin/{RCP26,RCP45,RCP60,RCP85}/{2030,2050,2070,2080}
 
-Re-reunning this workflow
+Re-running this workflow:
 - clone the repository
 - unzip the data folder(path should match otherwise if facing error check paths)
 - Run Component 1 SDM
 
-Findings:
-- Criterion C: matches the original Kepler (VU).
-- B cut-offs: the script’s cut-offs match the original XML exactly: EOO 2,000 / 20,000 / 50,000 km² and AOO 2 / 20 / 50 cells.
-- Overall: the published result is Vulnerable (C2b, D1, D2a). Yours is VU driven by C only, because D isn’t evaluated.
--  Drop test, 2050: A1B −44.3%, RCP26 −45.7%, RCP45 −13.5%, RCP60 −15.2% and RCP85 −44.3%. So 3 of 5 declines are at least 30%, and all are inside the published 7–95% range.
-- The “eight scenarios” count: I misread the paper’s abstract earlier. It says “at least 30% in eight scenarios” with 7–95% across all scenarios, so eight is a subset of a larger set. One GCM gives 5 scenarios at 2050.
+## Acknowledgements
+This workflow builds on the TERN CoESRA Case Study 2
+(<https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>) and the
+original Kepler workflow, run on CoESRA (Guru et al. 2016,
+<https://doi.org/10.1016/j.ecoinf.2016.08.003>). We thank:
+
+- The authors of Wardle, Greenville, Frank, Tischler, Emery & Dickman (2015),
+  *Austral Ecology* 40(4), 444–459, <https://doi.org/10.1111/aec.12265>, whose
+  ecosystem risk assessment set the direction.
+- TERN and the CoESRA team for access to the data and the CoESRA Virtual Desktop.
+- Yong Liam and TERN support (Research Data Services) for providing the original
+  Kepler workflow files and for guidance.
+
+We adapted the original workflow's components, logic and parameters and
+re-implemented them in R. Any errors are ours.
 
 Comparison from previous Study:
 B (EOO and AOO)
