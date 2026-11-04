@@ -1,31 +1,7 @@
 ---
-title: "Georgina gidgee woodlands: predicted change in bioclimatically suitable habitat for assessment of risk of collapse"
+title: "Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment"
 subtitle: "Reproduction of the 2015 assessment with MaxEnt under current and future climate"
-keywords:
-  - IUCN Red List of Ecosystems
-  - Climate Change
-author:
-  - name: Abhimanyu Raj Singh
-    orcid: 0000-0002-2279-7060
-    corresponding: true
-    affiliations: 
-      - id: qcif
-        name: QCIF
-      - ref: ces
-  - name: "J.R. Ferrer-Paris"
-    email: j.ferrer@unsw.edu.au
-    orcid: 0000-0002-9554-3395
-    affiliations:
-      - id: ces
-        name: Centre for Ecosystem Science, UNSW Sydney
-        city: Sydney
-        country: Australia
-      - id: iucn
-        name: IUCN Commission on Ecosystem Management
-        city: Gland
-        country: Switzerland 
-citation: 
- url: https://ecosystem-indicators-workflows.github.io/workflow_example_Gidgee/
+author: "Abhimanyu Raj Singh"
 date: last-modified
 license: "CC BY 4.0"
 format:
@@ -33,55 +9,47 @@ format:
     toc: true
     code-fold: true      # code hidden behind "Show code", outputs visible
     code-tools: true
-execute: 
-  eval: true # switch to false for testing style/layout 
+    embed-resources: true  # single self-contained file for GitHub Pages
+  ipynb: default           # Jupyter notebook with cell outputs (R kernel)
+engine: knitr
+jupyter:
+  kernelspec:
+    name: ir
+    language: R
+    display_name: R
 editor: visual
-bibliography: 
-  - bibTeX/references.bib 
 ---
 
 ## About this workflow
 
-This notebook reproduces the IUCN Red List of Ecosystems assessment of Georgina gidgee woodlands [@Wardle_2015] as an open, re-runnable R workflow. It is rebuilt from TERN CoESRA Case Study 2 [@GURU2016221] as part of the Ecosystem Indicator Workflows (EIW) project. 
+This notebook reproduces the IUCN Red List of Ecosystems assessment of Georgina gidgee woodlands (Wardle et al. 2015) as an open, re-runnable R workflow. It is rebuilt from TERN CoESRA Case Study 2 as part of the Ecosystem Indicator Workflows (EIW) project.
 
-:::{.aside}
-TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>
-:::
-
-- **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia. A type belonging to the [T5.3 Sclerophyll hot deserts and semi-deserts](https://w3id.org/iucn-get/EFG_T5_3) ecosystem functional group [@Keith_2022_Ecosystem_Typology].
-- **Questions:** To investigate the effects of climate change on habitat suitability of *A. georginae* woodlands. Estimate risk of collapse under the IUCN Red List of Ecosystems criteria [@IUCN_2024;@Keith_2013].
+- **Ecosystem:** Georgina gidgee (*Acacia georginae*) woodlands of arid central Australia.
+- **Questions:** Is the ecosystem threatened under the IUCN Red List of Ecosystems criteria A–E, and how might the area of suitable climate change under future scenarios?
 - **Method:**
-  1.  Download and validate the occurrence records for the keystone species.
-  2.  Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B [@IUCN_2024].
-  3.  Fit a MaxEnt habitat suitability model [@pkg_dismo;@PHILLIPS2006231;@Phillips_2017] to baseline climate (c. 2000), soil type and IBRA bioregion [@IBRA7].
+  1.  Download and validate the occurrence records.
+  2.  Calculate extent of occurrence (EOO) and area of occupancy (AOO) for Criterion B.
+  3.  Fit a MaxEnt species distribution model to baseline climate (c. 2000), soil type and IBRA bioregion.
   4.  Project the model to 19 future climate scenarios from CSIRO Mk3.6: SRES A1B for 2030, 2050 and 2070, and RCP 2.6, 4.5, 6.0 and 8.5 for 2030, 2050, 2070 and 2080.
   5.  Combine the results with the documented evidence from the 2015 assessment and assign IUCN categories.
-  6.  Compare the result with the published assessment [@Wardle_2015].
+  6.  Compare the result with the published assessment.
 - **Outputs:** maps, rasters, model files and tables in `results/`; data inventory, parameters, session information and workflow notes in `provenance/`.
-- **Requirements:** R with Java (MaxEnt runs through `rJava`), about 8 GB of memory for Java, about 3 GB of free disk space for the downloaded data, and internet access for Step 1. Run time and peak memory are recorded in `provenance/`. 
+- **Requirements:** R with Java (MaxEnt runs through `rJava`), about 8 GB of memory for Java, about 3 GB of free disk space for the downloaded data, and internet access for Step 1. Run time and peak memory are recorded in `provenance/`.
 
-:::{.aside}
 To run the workflow, open this file in RStudio and render it, or run `quarto render Gidgee_workflow_2026.qmd` from the repository root. Step 0 installs any missing R packages into your R library.
-
-**TODO: add tested R version and typical run time.**
-:::
 
 ## Data sources {#data-sources}
 
 All inputs are downloaded in Step 1 from two public archives supplied with TERN CoESRA Case Study 2.
 
-:::{.aside}
-- **TODO:** occurrence data download (GBIF / ALA) and climate, soil and IBRA dataset citations from the Data sources table.
-:::
-
-| Data | Source | Used for | Licence and attribution |
-|--------------|--------------|--------------|-------------------------------|
-| *Acacia georginae* occurrence records (272 records before cleaning) | **TODO:** GBIF download DOI and/or Atlas of Living Australia query, with access date | Criterion B; model presences | **TODO:** GBIF and ALA records carry CC0, CC BY 4.0 or CC BY-NC 4.0 per record; cite the download DOI |
-| Baseline climate: 19 bioclimatic variables, c. 2000, 0.05° (3 arcmin) | **TODO:** original climate dataset | Model predictors | **TODO** |
-| Future climate: CSIRO Mk3.6, SRES A1B and RCP 2.6–8.5 | **TODO:** original climate dataset | Model projections | **TODO** |
-| Soil type grid | **TODO:** original dataset | Categorical predictor | **TODO** |
-| IBRA bioregion grid | Interim Biogeographic Regionalisation for Australia v7 (Department of the Environment 2012) | Categorical predictor | **TODO:** confirm licence (CC BY expected) |
-| Original Kepler / BCCVL workflow files | TERN CoESRA Case Study 2 | Assessor notes for Criteria A, D and E | **TODO** |
+| Data | Source | Used for |
+|-------------------|------------------------|-----------------------------|
+| *Acacia georginae* occurrence records (272 records before cleaning) | Case-study archive | Criterion B; model presences |
+| Baseline climate: 19 bioclimatic variables, c. 2000, 0.05° (3 arcmin) | Case-study archive | Model predictors |
+| Future climate: CSIRO Mk3.6, SRES A1B and RCP 2.6–8.5 | Case-study archive | Model projections |
+| Soil type grid | Case-study archive | Categorical predictor |
+| IBRA bioregion grid (Interim Biogeographic Regionalisation for Australia, version 7) | Case-study archive | Categorical predictor |
+| Original Kepler / BCCVL workflow files | Case-study archive | Assessor notes for Criteria A, D and E |
 
 The Google Drive links are not persistent identifiers. Before release, the input archives should be deposited with a DOI (for example in Zenodo) and Step 1 updated to download from there.
 
@@ -115,7 +83,6 @@ This workflow does not crop to those regions. The supplied IBRA grid holds numer
 Starts the run timer and configures Java (8 GB memory, headless mode) before MaxEnt loads.
 
 ```{r}
-#| label: Session setup
 # Record the complete script runtime from the first executable step.
 t_start <- Sys.time()
 
@@ -146,6 +113,10 @@ Defines the project folders relative to the working directory and creates them i
 
 ```{r}
 #| label: Setup
+# ============================================================================
+# Setup
+# ============================================================================
+
 # Configuration ---------------------------------------------------------------
 # Use the directory from which this script/notebook is being run as the
 # project directory. This avoids using the old CoESRA file paths.
@@ -184,7 +155,9 @@ dir.create(results_tables_dir, recursive = TRUE, showWarnings = FALSE)
 Installs any missing R packages and loads them.
 
 ```{r}
-#| label: Step 0 Requirements
+# ============================================================================
+# Step 0 Requirements
+# ============================================================================
 
 options(repos = c(CRAN = "https://cloud.r-project.org"))
 
@@ -198,10 +171,9 @@ required_packages <- c(
   "raster",      # Handles raster environmental data.
   "sf",          # Handles coordinate reference systems and projections.
   "xml2",        # Parses the preserved Kepler workflow XML for Step 9.
-  "dismo",       # Supports habitat suitability modelling.
+  "dismo",       # Supports species-distribution modelling.
   "maps",        # Provides geographic map data.
-  "leaflet",     # Provides interactive map outputs.
-  "rJava"        # Provides low-Level R to Java Interface
+  "leaflet"      # Provides interactive map outputs.
 )
 
 is_installed <- function(pkg) nzchar(system.file(package = pkg))
@@ -230,7 +202,9 @@ library(leaflet)
 Downloads the two public case-study archives from Google Drive (no login required), extracts them into `data/raw/`, and records an inventory of every file with its SHA-256 checksum for provenance.
 
 ```{r}
-#| label: Step 1 Get data
+# ============================================================================
+# Step 1 Get data
+# ============================================================================
 
 # Public file identifiers -----------------------------------------------------
 # These IDs come from the public links supplied for Case 2.
@@ -257,11 +231,16 @@ drive_deauth()
 for (i in seq_len(nrow(public_files))) {
   destination <- file.path(raw_dir, public_files$output_name[i])
   
-  drive_download(
-    file = as_id(public_files$id[i]),
-    path = destination,
-    overwrite = TRUE
+  # Quiet googledrive's own messages, which print the full local save path,
+  # and report the location relative to the project folder instead.
+  googledrive::with_drive_quiet(
+    drive_download(
+      file = as_id(public_files$id[i]),
+      path = destination,
+      overwrite = TRUE
+    )
   )
+  cat("Downloaded:", fs::path_rel(destination, start = project_dir), "\n")
 }
 
 # Unzip downloaded archives -----------------------------------------------------
@@ -326,10 +305,12 @@ write.csv(
 Identifies the occurrence CSV, the baseline, A1B and AR5 climate layers and the original Kepler workflow files, then plots every baseline layer to confirm it is readable.
 
 ```{r}
-#| label: Step 2 Inspect the downloaded files
 #| fig-width: 12
 #| fig-height: 14
 
+# ============================================================================
+# Step 2 Inspect the downloaded files
+# ============================================================================
 
 # List all extracted files -----------------------------------------------------
 # Exclude the original ZIP archives and macOS zip metadata (__MACOSX).
@@ -415,7 +396,9 @@ raster::plot(
 Checks the coordinates for missing values, duplicates and points outside mainland Australia, removes invalid records and saves the cleaned table.
 
 ```{r}
-#| label: Step 3 Load and validate occurrence data
+# ============================================================================
+# Step 3 Load and validate occurrence data
+# ============================================================================
 
 # Load the occurrence CSV ---------------------------------------------------------
 occurrences_raw <- readr::read_csv(occurrence_csv, show_col_types = FALSE)
@@ -480,7 +463,9 @@ readr::write_csv(occurrence_validation, file.path(provenance_dir, "occurrence_va
 Projects the occurrence points from WGS84 to GDA94 / Australian Albers (EPSG:3577), so the area calculations in Step 5 use true 10 × 10 km cells.
 
 ```{r}
-#| label: Step 4 Define the analysis projection
+# ============================================================================
+# Step 4 Define the analysis projection
+# ============================================================================
 
 # Read the occurrence coordinates -----------------------------------------------------
 # The occurrence CSV and the baseline .asc rasters are both supplied in
@@ -525,7 +510,9 @@ print(head(projected_coords))
 Calculates the extent of occurrence (EOO, convex hull around the records) and area of occupancy (AOO, number of occupied 10 × 10 km cells). Threat-defined locations (B3) cannot be calculated from these inputs and are recorded as unavailable.
 
 ```{r}
-#| label: Step 5 Calculate Criterion B spatial indicators
+# ============================================================================
+# Step 5 Calculate Criterion B spatial indicators
+# ============================================================================
 
 # --- B1 Extent of occurrence ---------------------------------------------------------
 
@@ -619,12 +606,14 @@ draw_aoo_map()
 dev.off()
 ```
 
-## Step 6: Prepare the habitat suitability model
+## Step 6: Prepare the species distribution model
 
 Checks that MaxEnt is available, formats the presence points, and aligns all 19 future-climate layer sets with the baseline grid before any model is run. Modelling settings and software versions are recorded.
 
 ```{r}
-#| label: Step 6 Prepare the habitat suitability model
+# ============================================================================
+# Step 6 Prepare the species-distribution model
+# ============================================================================
 
 # Confirm MaxEnt is available before going further -------------------------------------
 maxent_jar_path <- file.path(system.file("java", package = "dismo"), "maxent.jar")
@@ -819,7 +808,9 @@ readr::write_csv(analysis_parameters, file.path(provenance_dir, "analysis_parame
 Fits MaxEnt to the occurrence records and baseline climate, treating IBRA bioregion and soil type as categorical, and saves the model, predictions and a baseline suitability map.
 
 ```{r}
-#| label: Step 7 Run the baseline SDM
+# ============================================================================
+# Step 7 Run the baseline SDM
+# ============================================================================
 
 # Run MaxEnt using the occurrence data and baseline climate layers ------------------------
 # ibra and soil are categorical (bioregion / soil-type codes), so they are
@@ -885,9 +876,12 @@ plot(sf::st_geometry(occurrence_points_wgs84), add = TRUE, pch = 16, col = "blac
 Projects the baseline model onto each A1B and AR5 scenario, converts suitability to suitable / unsuitable with MaxEnt's maximum training sensitivity plus specificity threshold, and compares the suitable area with the baseline.
 
 ```{r}
-#| label: Step 8 Run future climate scenarios
 #| fig-width: 10
 #| fig-height: 8
+
+# ============================================================================
+# Step 8 Run future climate scenarios
+# ============================================================================
 
 # Binary suitable/unsuitable threshold -------------------------------------------------
 # Use MaxEnt's own "Maximum training sensitivity plus specificity" threshold
@@ -1006,8 +1000,9 @@ cat(
 Baseline and every future scenario on one 0–1 suitability scale. Only the baseline is shown at first; use the layer control (top right) to switch scenarios on and off.
 
 ```{r}
-#| label: Interactive comparison map — baseline vs. every future scenario
-
+# ============================================================================
+# Interactive comparison map — baseline vs. every future scenario
+# ============================================================================
 # All layers share one colour scale (0-1 cloglog suitability) so toggling
 # between them is a fair visual comparison. Only the baseline is shown by
 # default; use the layer control (top right) to switch scenarios on/off.
@@ -1060,7 +1055,9 @@ comparison_map
 Assesses criteria A–E. Criteria B and C use this workflow's calculations. Criteria A, D and E use the documented evidence from the original 2015 assessment, preserved in the Kepler workflow XML, rather than being derived from the model.
 
 ```{r}
-#| label: Step 9 Assess IUCN criteria
+# ============================================================================
+# Step 9 Assess IUCN criteria
+# ============================================================================
 
 # Parse the preserved Kepler XML for the original assessors' own
 # per-subcriterion conclusions and literature basis -----------------------------
@@ -1165,7 +1162,9 @@ print(criterion_E_assessment)
 Maps each subcriterion onto the original workflow's 0–4 scale and applies the precautionary rule: the most severe determinate category drives each criterion and the overall result. The Criterion B conclusion still needs checking against the official IUCN threshold table.
 
 ```{r}
-#| label: Step 10 Convert criterion results to assessment categories
+# ============================================================================
+# Step 10 Convert criterion results to assessment categories
+# ============================================================================
 
 # Use the original mapping -------------------------------------------------------
 # This is the exact 0-4 scale documented in the preserved Kepler workflow's
@@ -1291,7 +1290,9 @@ readr::write_csv(final_assessment, file.path(results_tables_dir, "final_assessme
 Compares this result with the published 2015 assessment (Wardle et al. 2015) and records the likely cause of each difference.
 
 ```{r}
-#| label: Step 11 Compare with the original assessment
+# ============================================================================
+# Step 11 Compare with the original assessment
+# ============================================================================
 
 # The published 2015 assessment's result, as stated in the case-study
 # reference material (not recalculated — this is the historical record).
@@ -1344,7 +1345,9 @@ readr::write_csv(comparison_notes, file.path(provenance_dir, "comparison_notes.c
 Saves session information, run time, memory and disk use, the original Kepler workflow XML and notes on methodological decisions to `provenance/`.
 
 ```{r}
-#| label: Step 12 Record provenance
+# ============================================================================
+# Step 12 Record provenance
+# ============================================================================
 
 # Session information ---------------------------------------------------------------
 writeLines(
@@ -1482,7 +1485,7 @@ workflow_notes <- c(
   sprintf("- Overall category matches: %s", overall_matches)
 )
 writeLines(workflow_notes, file.path(provenance_dir, "workflow_notes.md"))
-cat("Provenance files written to:", provenance_dir, "\n")
+cat("Provenance files written to:", fs::path_rel(provenance_dir, start = project_dir), "\n")
 ```
 
 ## Step 13: Final outputs
@@ -1490,8 +1493,9 @@ cat("Provenance files written to:", provenance_dir, "\n")
 Checks the project folder structure against the expected layout and writes a README if one does not exist.
 
 ```{r}
-#| label: Step 13 Final outputs
-
+# ============================================================================
+# Step 13 Final outputs
+# ============================================================================
 
 # Check the final project structure against the expected layout -----------------------
 # Adapted to this project's actual environment: a Quarto (.qmd) notebook run
@@ -1564,12 +1568,27 @@ cat(
 )
 ```
 
-## License
+## How to cite and licence
+
+If you use this workflow, please cite it as:
+
+> Singh, A. R. (2026). *Georgina gidgee woodlands: species distribution modelling and IUCN Red List of Ecosystems assessment* \[Computational workflow\]. Ecosystem Indicator Workflows project. <https://github.com/Ecosystem-Indicators-Workflows/workflow_example_Gidgee>
+
+Please also cite the original assessment (Wardle et al. 2015) and the data sources above.
 
 - **Code:** Apache License 2.0 (see `LICENSE`).
-- **Text, figures and derived outputs:** Creative Commons Attribution 4.0 International (CC BY 4.0). See citation information below, please also cite the original assessment [@Wardle_2015] and the data sources above.
+- **Text, figures and derived outputs:** Creative Commons Attribution 4.0 International (CC BY 4.0).
 - **Input data:** remain under their original licences (see [Data sources](#data-sources)).
 
-**Acknowledgements.** This workflow builds on TERN CoESRA Case Study 2 and the original BCCVL / Kepler workflow.
+**Acknowledgements.** This workflow was developed in the Ecosystem Indicator Workflows project, supported by the Australian Research Data Commons (ARDC). It builds on TERN CoESRA Case Study 2 and the original BCCVL / Kepler workflow.
 
-**Funding.** This workflow was developed in the Ecosystem Indicator Workflows project, a co-investment partnership with the Australian Research Data Commons (ARDC) through the Planet Research Data Commons (DOI:[10.3565/j5sq-a757](https://doi.org/10.3565/j5sq-a757)). The ARDC is enabled by the Australian Government’s National Collaborative Research Infrastructure Strategy (NCRIS). 
+## References
+
+- Bland, L. M., Keith, D. A., Miller, R. M., Murray, N. J. & Rodríguez, J. P. (Eds.) (2017). *Guidelines for the application of IUCN Red List of Ecosystems Categories and Criteria*, version 1.1. IUCN, Gland, Switzerland. <https://doi.org/10.2305/IUCN.CH.2016.RLE.3.en>
+- Hijmans, R. J., Phillips, S., Leathwick, J. & Elith, J. *dismo: Species Distribution Modeling*. R package. <https://doi.org/10.32614/CRAN.package.dismo>
+- Keith, D. A., Rodríguez, J. P., Rodríguez-Clark, K. M., et al. (2013). Scientific foundations for an IUCN Red List of Ecosystems. *PLoS ONE*, 8(5), e62111. <https://doi.org/10.1371/journal.pone.0062111>
+- Keith, D. A., Ferrer-Paris, J. R., Nicholson, E., et al. (2022). A function-based typology for Earth's ecosystems. *Nature*, 610, 513–518. <https://doi.org/10.1038/s41586-022-05318-4>
+- Phillips, S. J., Anderson, R. P. & Schapire, R. E. (2006). Maximum entropy modeling of species geographic distributions. *Ecological Modelling*, 190(3–4), 231–259. <https://doi.org/10.1016/j.ecolmodel.2005.03.026>
+- Phillips, S. J., Anderson, R. P., Dudík, M., Schapire, R. E. & Blair, M. E. (2017). Opening the black box: an open-source release of Maxent. *Ecography*, 40(7), 887–893. <https://doi.org/10.1111/ecog.03049>
+- TERN CoESRA Case Study 2 — Georgina gidgee woodlands: <https://www.tern.org.au/coesra-case-study-2-georgina-gidgee-woodlands/>
+- Wardle, G. M., Greenville, A. C., Frank, A. S. K., Tischler, M., Emery, N. J. & Dickman, C. R. (2015). Ecosystem risk assessment of Georgina gidgee woodlands in central Australia. *Austral Ecology*, 40(4), 444–459. <https://doi.org/10.1111/aec.12265>

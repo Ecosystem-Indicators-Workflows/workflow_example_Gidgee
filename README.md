@@ -1,3 +1,12 @@
+## Acknowledgments:
+This workflow reproduces and extends TERN CoESRA Case Study 2, Georgina gidgee woodlands. We are grateful to the original authors and teams whose work it builds on:
+
+Yong Liam and TERN support (Research Data Services) for providing the original Kepler workflow files and for guidance.
+All raw data files were accessed through the CoESRA Virtual Desktop. Workflow description on TERN webpage were very helpful.
+The Desert Ecology Research Group, University of Sydney, and the authors of Wardle, Greenville, Frank, Tischler, Emery & Dickman (2015), Austral Ecology 40(4), https://doi.org/10.1111/aec.12265, whose ecosystem risk assessment set the direction.
+
+We adopted the original workflow’s components, logic, functions and parameters, and re-implemented them in R. Any errors are ours.
+
 ## Run Workflow:
 1. copy the repository link
 2. open a new project with git version history
@@ -35,40 +44,31 @@ Future raster Stack:
 CMIP3/SRES: A1B/CSIRO_mk3.6/2.5_arcmin/{2030,2050,2070}
 CMIP5/AR5: AR5/CSIRO_mk3.6/2.5_arcmin/{RCP26,RCP45,RCP60,RCP85}/{2030,2050,2070,2080}
 
-Re-running this workflow
+Re-reunning this workflow
 - clone the repository
 - unzip the data folder(path should match otherwise if facing error check paths)
 - Run Component 1 SDM
 
+Findings:
+- Criterion C: matches the original Kepler (VU).
+- B cut-offs: the script’s cut-offs match the original XML exactly: EOO 2,000 / 20,000 / 50,000 km² and AOO 2 / 20 / 50 cells.
+- Overall: the published result is Vulnerable (C2b, D1, D2a). Yours is VU driven by C only, because D isn’t evaluated.
+-  Drop test, 2050: A1B −44.3%, RCP26 −45.7%, RCP45 −13.5%, RCP60 −15.2% and RCP85 −44.3%. So 3 of 5 declines are at least 30%, and all are inside the published 7–95% range.
+- The “eight scenarios” count: I misread the paper’s abstract earlier. It says “at least 30% in eight scenarios” with 7–95% across all scenarios, so eight is a subset of a larger set. One GCM gives 5 scenarios at 2050.
+
+Comparison from previous Study:
+B (EOO and AOO)
+Same: the same convex-hull and grid method, and the cut-offs match the original XML exactly (EOO 2,000 / 20,000 / 50,000 km²; AOO 2 / 20 / 50 cells).
+Changed (AOO): the 2026 version counts distinct occupied cells; the original looks like it counted points.
+Changed (B3): B3 locations is now NA, since the inputs have no threat data.
+Scoring: B is now scored from the calculated values, giving LC (EOO 658,660 km², AOO 272 cells). Before, the earlier tes.R hard-coded LC. The original’s B score isn’t stored in the XML, so there is nothing to compare it with.
+
+C (SDM)
+Same: the SDM was fitted on the baseline and projected to the A1B and AR5 scenarios.
+Changed (scoring): the original typed the C scores in (1, 4, 0). Now C is scored from the computed decline in suitable area at 2050 (VU at 30% or more, EN at 50%, CR at 80%), taking the worst scenario. The result is VU (declines 13.5–45.7%).
+
+
+
 ## Fair Check
 <!-- FAIR:START -->
-## FAIR assessment
-
-[![FAIR checklist badge](https://fairsoftwarechecklist.net/badge.svg)](https://fairsoftwarechecklist.net/v0.2?f=31&a=30110&i=30001&r=022) ![EIW FAIR score](https://img.shields.io/badge/EIW%20FAIR-17%2F33-orange)
-
-**17 / 33 points · 7 / 15 questions at EIW target** · not yet at EIW minimum
-
-| Principle | Score | EIW target |
-|---|---|---|
-| Findable | 4 / 4 (100%) | 4 / 4 |
-| Accessible | 5 / 10 (50%) | 10 / 10 |
-| Interoperable | 4 / 12 (33%) | 12 / 12 |
-| Reusable | 4 / 7 (57%) | 6 / 7 |
-
-<details><summary>Gaps to close (8)</summary>
-
-- **a:q1 Persistent identifier (DOI)** (0 / 2): No DOI: a GitHub URL can move or vanish
-- **a:q4 Identifier in metadata** (0 / 3): No workflow name or ID in metadata (no CITATION.cff)
-- **i:q1 Versioning scheme** (0 / 2): No git tags or version numbers
-- **i:q2 Dependencies specified** (0 / 3): No dependency file (renv.lock / requirements.txt)
-- **i:q3 Links to related software** (0 / 2): No links to related software (CITATION.cff references)
-- **i:q4 Links to related data** (1 / 2): No data references in CITATION.cff (add input DOIs)
-- **r:q0 Executable** (0 / 1): Missing: pinned dependencies, input data
-- **r:q2 Licence** (2 / 3): No SPDX licence id in CITATION.cff / codemeta
-
-</details>
-
-![FAIR scores per question](fair/fair-scores.png)
-
-<sub>Updated 2026-10-30 from commit `59a3903` by `.fair/fair_check.R`. Edit `.fair/fair-checklist.yml`, not this block.</sub>
 <!-- FAIR:END -->
